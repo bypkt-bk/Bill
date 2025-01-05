@@ -4,9 +4,18 @@ import Button from './button.vue';
 import { ref } from 'vue';
 
 const customers = ref([
-  { id: '1', name: 'John Doe', date: '2025-01-05', amount: '$200' },
-  { id: '2', name: 'Jane Smith', date: '2025-01-04', amount: '$150' },
-  { id: '3', name: 'Alice Johnson', date: '2025-01-03', amount: '$300' },
+  { id: '1', name: 'John Doe', date: '2025-01-05', amount: '200' },
+  { id: '2', name: 'Jane Smith', date: '2025-01-04', amount: '150' },
+  { id: '3', name: 'Alice Johnson', date: '2025-01-03', amount: '300' },
+  { id: '1', name: 'John Doe', date: '2025-01-05', amount: '200' },
+  { id: '2', name: 'Jane Smith', date: '2025-01-04', amount: '150' },
+  { id: '3', name: 'Alice Johnson', date: '2025-01-03', amount: '300' },
+  { id: '1', name: 'John Doe', date: '2025-01-05', amount: '200' },
+  { id: '2', name: 'Jane Smith', date: '2025-01-04', amount: '150' },
+  { id: '3', name: 'Alice Johnson', date: '2025-01-03', amount: '300' },
+  { id: '1', name: 'John Doe', date: '2025-01-05', amount: '200' },
+  { id: '2', name: 'Jane Smith', date: '2025-01-04', amount: '150' },
+  { id: '3', name: 'Alice Johnson', date: '2025-01-03', amount: '300' },
 ]);
 
 function HomePage() {
@@ -22,6 +31,10 @@ function BillPage() {
 }
 
 function EditList() {}
+
+function handleBill(customerId) {
+  window.location.href = `/${customerId}`;
+}
 </script>
 
 <template>
@@ -56,49 +69,36 @@ function EditList() {}
                     <tr v-for="(customer, id) in customers" :key="id" @click="handleBill(customer.id)">
                         <td>{{ customer.name }}</td>
                         <td>{{ customer.date }}</td>
-                        <td>{{ customer.amount }}</td>
+                        <td>{{ customer.amount }}.-</td>
                     </tr>
                 </tbody>
             </table>
         </div>
+        <Button :icon="House" label="Home" :onclick="HomePage" class="absolute -right-16 top-16 hover:bg-neutral-100" />
+        <Button :icon="UserRound" label="Account" :onclick="AccountPage" class="absolute -right-16 top-[12rem] hover:bg-neutral-100" />
+        <Button :icon="ReceiptText" label="new Bill" :onclick="BillPage" class="absolute -right-16 top-[20rem] hover:bg-neutral-100" />
+        <Button :icon="Edit" label="Edit" :onclick="EditList" class="absolute -right-16 top-[28rem] hover:bg-neutral-100" />
     </div>
-    <Button 
-    :icon="House"
-    label="Home"
-    :onclick="HomePage"
-    class="absolute left-1 top-1/4"/>
-    <Button 
-    :icon="UserRound"
-    label="Account"
-    :onclick="AccountPage"
-    class="absolute left-1"/>
-    <Button 
-    :icon="ReceiptText"
-    label="new Bill"
-    :onclick="BillPage"
-    class="absolute right-1"/>
-    <Button 
-    :icon="Edit"
-    label="Edit"
-    :onclick="EditList"
-    class="absolute right-1 top-1/4"/>
+
 </template>
 
 <style>
 #paper {
+    position: relative;
     background: white;
     max-width: 555px;
     height: 758px;
-    padding: 38px;
+    padding: 28px;
     border-radius: 20px;
     border-color: #E5E7EB;
     border: 2px solid #E5E7EB;
-    overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 header {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    font-size: 24px;
+    font-size: 32px;
     text-align: center;
     margin-bottom: 8px;
 }
@@ -159,6 +159,7 @@ select {
 
 .table-container {
     margin: 16px auto;
+    width: 100%;
     max-height: 522px;
     border: 1px solid #E5E7EB;
     border-radius: 8px;
