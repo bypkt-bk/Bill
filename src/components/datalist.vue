@@ -3,19 +3,10 @@ import { House, UserRound, Search, ReceiptText, Edit } from 'lucide-vue-next';
 import Button from './button.vue';
 import { ref } from 'vue';
 
-const customers = ref([
-  { id: '1', name: 'John Doe', date: '2025-01-05', amount: '200' },
-  { id: '2', name: 'Jane Smith', date: '2025-01-04', amount: '150' },
-  { id: '3', name: 'Alice Johnson', date: '2025-01-03', amount: '300' },
-  { id: '1', name: 'John Doe', date: '2025-01-05', amount: '200' },
-  { id: '2', name: 'Jane Smith', date: '2025-01-04', amount: '150' },
-  { id: '3', name: 'Alice Johnson', date: '2025-01-03', amount: '300' },
-  { id: '1', name: 'John Doe', date: '2025-01-05', amount: '200' },
-  { id: '2', name: 'Jane Smith', date: '2025-01-04', amount: '150' },
-  { id: '3', name: 'Alice Johnson', date: '2025-01-03', amount: '300' },
-  { id: '1', name: 'John Doe', date: '2025-01-05', amount: '200' },
-  { id: '2', name: 'Jane Smith', date: '2025-01-04', amount: '150' },
-  { id: '3', name: 'Alice Johnson', date: '2025-01-03', amount: '300' },
+const bills = ref([
+  { bill_id: 1, name: 'John Doe', date: '2025-01-05', amount: '200' },
+  { bill_id: 2, name: 'Jane Smith', date: '2025-01-04', amount: '150' },
+  { bill_id: 3, name: 'Alice Johnson', date: '2025-01-03', amount: '300' },
 ]);
 
 function HomePage() {
@@ -26,14 +17,18 @@ function AccountPage() {
   window.location.href = '/account';
 }
 
-function BillPage() {
-  window.location.href = '/bill';
+function BillPage(bill_id) {
+  window.location.href = `/bill/${bill_id}`;
 }
 
 function EditList() {}
 
-function handleBill(customerId) {
-  window.location.href = `/${customerId}`;
+function newBill() {
+  window.location.href = `/bill/1`;
+}
+
+function handleText(text) {
+  console.log(text);
 }
 </script>
 
@@ -66,18 +61,18 @@ function handleBill(customerId) {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(customer, id) in customers" :key="id" @click="handleBill(customer.id)">
-                        <td>{{ customer.name }}</td>
-                        <td>{{ customer.date }}</td>
-                        <td>{{ customer.amount }}.-</td>
+                    <tr v-for="(bill, id) in bills" :key="id" @click="BillPage(bill.bill_id)">
+                        <td>{{ bill.name }}</td>
+                        <td>{{ bill.date }}</td>
+                        <td>{{ bill.amount }}.-</td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <Button :icon="House" label="Home" :onclick="HomePage" class="absolute -right-16 top-16 hover:bg-neutral-100" />
-        <Button :icon="UserRound" label="Account" :onclick="AccountPage" class="absolute -right-16 top-[12rem] hover:bg-neutral-100" />
-        <Button :icon="ReceiptText" label="new Bill" :onclick="BillPage" class="absolute -right-16 top-[20rem] hover:bg-neutral-100" />
-        <Button :icon="Edit" label="Edit" :onclick="EditList" class="absolute -right-16 top-[28rem] hover:bg-neutral-100" />
+        <Button :icon="House" label="Home" :onClick="HomePage" class="absolute -right-16 top-16 hover:bg-neutral-100" />
+        <Button :icon="UserRound" label="Account" :onClick="AccountPage" class="absolute -right-16 top-[12rem] hover:bg-neutral-100" />
+        <Button :icon="ReceiptText" label="new Bill" :onClick="newBill" class="absolute -right-16 top-[20rem] hover:bg-neutral-100" />
+        <Button :icon="Edit" label="Edit" :onClick="EditList" class="absolute -right-16 top-[28rem] hover:bg-neutral-100" />
     </div>
 
 </template>
@@ -86,7 +81,6 @@ function handleBill(customerId) {
 #paper {
     position: relative;
     background: white;
-    max-width: 555px;
     height: 758px;
     padding: 28px;
     border-radius: 20px;
@@ -94,20 +88,18 @@ function handleBill(customerId) {
     border: 2px solid #E5E7EB;
     display: flex;
     flex-direction: column;
+    gap: 12px;
 }
 
 header {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-size: 32px;
     text-align: center;
-    margin-bottom: 8px;
 }
 
 p {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    font-size: 14px;
     text-align: center;
-    margin-bottom: 16px;
 }
 
 section {
@@ -158,9 +150,8 @@ select {
 }
 
 .table-container {
-    margin: 16px auto;
     width: 100%;
-    max-height: 522px;
+    height: 100%;
     border: 1px solid #E5E7EB;
     border-radius: 8px;
     overflow-y: auto;
@@ -177,6 +168,7 @@ table {
 thead {
     background-color: #f3f4f6;
     position: sticky;
+    top: 0;
 }
 
 th,

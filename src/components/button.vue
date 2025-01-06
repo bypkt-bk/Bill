@@ -1,7 +1,7 @@
 <script setup>
 defineProps({
-  icon: String,
-  label: Object,
+  icon: Function,
+  label: String,
   onClick: { type: Function, required: true },
 });
 </script>
