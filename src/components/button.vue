@@ -7,14 +7,14 @@ defineProps({
 </script>
 
 <template>
-    <button @click="onClick">
+    <button class="circle-button" @click="onClick">
         <component :is="icon" />
     <p>{{ label }}</p>
     </button>
 </template>
 
 <style>
-button {
+.circle-button {
     background-color: white;
     height: 114px;
     width: 114px;
