@@ -1,29 +1,67 @@
 <script setup lang="ts">
 import { House, UserRound, Printer, Plus } from 'lucide-vue-next';
 import Buttons from './button.vue';
-import { ref } from 'vue';
 import { Calendar } from './ui/calendar';
-
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 import { cn } from '../lib/utils';
 import { DateFormatter, type DateValue, getLocalTimeZone } from '@internationalized/date';
 import { Calendar as CalendarIcon } from 'lucide-vue-next';
-
+import { ref, onMounted,watch } from 'vue';
 const df = new DateFormatter('en-US', {
   dateStyle: 'long',
 });
 
-const value = ref<DateValue>();
-const generateId = () => Math.random().toString(36).substr(2, 9);
+async function SaveDate() {
+  try {
+    const payload = {
+      customer_name: customer_name.value, // Replace with actual input value
+      address: address.value, // Replace with actual input value
+      date: new Date(), // Replace with selected date
+      items: items.value, // Items from your table
+    };
 
-const items = ref([
-  { id: generateId(), quantity: 1, description: 'Item A', unitPrice: 100, amount: 200 },
-  { id: generateId(), quantity: 2, description: 'Item B', unitPrice: 150, amount: 150 },
-  { id: generateId(), quantity: 3, description: 'Item C', unitPrice: 100, amount: 300 },
-]);
+    const response = await fetch('/api/bills', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
 
-function updateAmount(item: { amount: number; quantity: number; unitPrice: number }) {
-  return (item.amount = item.quantity * item.unitPrice);
+    if (!response.ok) throw new Error('Failed to save bill');
+
+    console.log('✅ Bill saved successfully');
+  } catch (error) {
+    console.error('❌ Error saving bill:', error.message);
+  }
+}
+
+const customer_name = ref('');
+const address = ref('');
+const items = ref([]);
+const value = ref(null); // For the calendar component
+
+function show() {
+    console.log('Customer Name:', customer_name.value);
+    console.log('Address:', address.value);
+    console.log('Items:', items.value);
+    console.log('Selected Date:', value.value);
+}
+
+// Watch each value
+watch(customer_name, () => {
+    show();
+});
+watch(address, () => {
+    show();
+});
+watch(items, () => {
+    show();
+});
+watch(value, () => {
+    show();
+});
+
+function updateAmount(item: { quantity: number; unitPrice: number }): number {
+  return item.quantity * item.unitPrice;
 }
 
 function HomePage() {
@@ -34,16 +72,13 @@ function AccountPage() {
   window.location.href = '/account';
 }
 
-function SaveDate() {}
-
 function PrintBill() {
   window.print();
   console.log('print');
 }
 
 function addItem() {
-  items.value.push({
-    id: generateId(),
+    items.value.push({
     quantity: null,
     description: null,
     unitPrice: null,
@@ -51,13 +86,6 @@ function addItem() {
   });
 }
 
-function handleName(text: string) {
-  console.log(text);
-}
-
-function handleAdress(text: string) {
-  console.log(text);
-}
 </script>
 
 <template>
@@ -68,19 +96,19 @@ function handleAdress(text: string) {
         <p>171 หมู่14 ถนน อุบล-ตระการ ตำบลไร่น้อย อำเภอเมืองอุบลราชธานี จังหวัดอุบลราชธานี</p>
         <section>
             <div class="relative flex flex-1 min-w-[300px]">
-                <input type="text" class="customername-input" @onChange="handleName">
+                <input type="text" class="customername-input" v-model="customer_name">
                 <small class="absolute top-[-10px] left-2 px-1 bg-white">
                     Customer Name</small></input>
             </div>
             <Popover>
                 <PopoverTrigger as-child>
-                    <Button variant="outline" :class="cn(
+                    <button variant="outline" :class="cn(
                         'flex flex-row w-[180px] h-[40px] items-center justify-start border-[1px] border-solid border-[#E5E7EB] rounded-[6px] px-4 text-left text-[14px]',
                         !value && 'text-muted-foreground',
                     )">
                         <CalendarIcon class="mr-2 h-4 w-4" />
                         {{ value ? df.format(value.toDate(getLocalTimeZone())) : "Pick a date" }}
-                    </Button>
+                    </button>
                 </PopoverTrigger>
                 <PopoverContent class="w-auto p-0">
                     <Calendar v-model="value" initial-focus />
@@ -88,7 +116,7 @@ function handleAdress(text: string) {
             </Popover>
         </section>
         <div class="relative">
-            <input type="text" class="address-input" @onChange="handleAdress" />
+            <input type="text" class="address-input" v-model="address" />
             <small class="absolute top-[-10px] left-2 px-1 bg-white">Address</small>
         </div>
         <div class="table-container">
@@ -102,7 +130,7 @@ function handleAdress(text: string) {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(item, id) in items" :key="id">
+                    <tr v-for="(item, description) in items" :key="description">
                         <td><input type="number"  class="input-item w-full max-w-12 px-1 appearance-none [&::-webkit-inner-spin-button]:appearance-none" v-model="item.quantity"></td>
                         <td><input class="input-item w-full px-1" v-model="item.description"></td>
                         <td><input type="number" class="input-item w-full max-w-[74px] px-1 appearance-none [&::-webkit-inner-spin-button]:appearance-none" v-model="item.unitPrice"></td>
