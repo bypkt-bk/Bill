@@ -6,27 +6,37 @@ import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 import { cn } from '../lib/utils';
 import { DateFormatter, type DateValue, getLocalTimeZone } from '@internationalized/date';
 import { Calendar as CalendarIcon } from 'lucide-vue-next';
-import { ref, onMounted,watch } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 const df = new DateFormatter('en-US', {
   dateStyle: 'long',
 });
 
+const customer_name = ref('');
+const address = ref('');
+const items = ref([]);
+const value = ref(null);
+
 async function SaveDate() {
   try {
     const payload = {
-      customer_name: customer_name.value, // Replace with actual input value
-      address: address.value, // Replace with actual input value
-      date: new Date(), // Replace with selected date
-      items: items.value, // Items from your table
+      customer_name: customer_name.value,
+      address: address.value,
+      date: value.value ? new Date(value.value) : new Date(),
+      items: items.value,
     };
 
-    const response = await fetch('/api/bills', {
+    console.log('Payload being sent:', payload);
+
+    const response = await fetch('http://localhost:4321/api/bill', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     });
 
-    if (!response.ok) throw new Error('Failed to save bill');
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Failed to save bill: ${response.status} - ${errorText}`);
+    }
 
     console.log('✅ Bill saved successfully');
   } catch (error) {
@@ -34,30 +44,18 @@ async function SaveDate() {
   }
 }
 
-const customer_name = ref('');
-const address = ref('');
-const items = ref([]);
-const value = ref(null); // For the calendar component
-
-function show() {
-    console.log('Customer Name:', customer_name.value);
-    console.log('Address:', address.value);
-    console.log('Items:', items.value);
-    console.log('Selected Date:', value.value);
-}
-
 // Watch each value
 watch(customer_name, () => {
-    show();
+  show();
 });
 watch(address, () => {
-    show();
+  show();
 });
 watch(items, () => {
-    show();
+  show();
 });
 watch(value, () => {
-    show();
+  show();
 });
 
 function updateAmount(item: { quantity: number; unitPrice: number }): number {
@@ -78,14 +76,13 @@ function PrintBill() {
 }
 
 function addItem() {
-    items.value.push({
+  items.value.push({
     quantity: null,
     description: null,
     unitPrice: null,
     amount: null,
   });
 }
-
 </script>
 
 <template>
