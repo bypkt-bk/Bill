@@ -1,39 +1,19 @@
 <script setup>
 import { House, UserRound, Search, ReceiptText, Edit } from 'lucide-vue-next';
-import Button from './button.vue';
+import navigation from './navigation.vue';
 import { ref } from 'vue';
 
 const bills = ref([
-  { bill_id: 1, name: 'John Doe', date: '2025-01-05', amount: '200' },
-  { bill_id: 2, name: 'Jane Smith', date: '2025-01-04', amount: '150' },
-  { bill_id: 3, name: 'Alice Johnson', date: '2025-01-03', amount: '300' },
+    { bill_id: 1, name: 'John Doe',order: '2025-01-05', shipping: '2025-01-05', amount: '200',status: '1' },
+    { bill_id: 2, name: 'Jane Smith', order: '2025-01-04', shipping: '2025-01-05', amount: '150',status: '0' },
+    { bill_id: 3, name: 'Alice Johnson', order: '2025-01-03', shipping: '2025-01-05', amount: '300',status: '0' },
 ]);
 
-function HomePage() {
-  window.location.href = '/home';
-}
-
-function AccountPage() {
-  window.location.href = '/account';
-}
-
-function BillPage(bill_id) {
-  window.location.href = `/bill/${bill_id}`;
-}
-
-function EditList() {}
-
-function newBill() {
-  window.location.href = `/bill/1`;
-}
-
-function handleText(text) {
-  console.log(text);
-}
 </script>
 
 <template>
-    <div id="paper">
+        <navigation />
+    <div id="data-section">
         <header>
             บุญผองวัศดุก่อสร้าง
         </header>
@@ -51,54 +31,53 @@ function handleText(text) {
                 <option value="lowest_amount">Lowest Amount</option>
             </select>
         </section>
-        <div class="table-container">
+        <hero class="table-container">
             <table>
                 <thead>
                     <tr>
                         <th>Customer Name</th>
-                        <th>Date</th>
-                        <th>Amount</th>
+                        <th>Order on</th>
+                        <th>Shipping on</th>
+                        <th>Total</th>
+                        <th>status</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="(bill, id) in bills" :key="id" @click="BillPage(bill.bill_id)">
                         <td>{{ bill.name }}</td>
-                        <td>{{ bill.date }}</td>
-                        <td>{{ bill.amount }}.-</td>
+                        <td>{{ bill.order }}</td>
+                        <td>{{ bill.shipping }}</td>
+                        <td>{{ bill.amount }}</td>
+                        <td>{{ bill.status }}</td>
                     </tr>
                 </tbody>
             </table>
-        </div>
-        <Button :icon="House" label="Home" :onClick="HomePage" class="absolute -right-16 top-16 hover:bg-neutral-100" />
-        <Button :icon="UserRound" label="Account" :onClick="AccountPage" class="absolute -right-16 top-[12rem] hover:bg-neutral-100" />
-        <Button :icon="ReceiptText" label="new Bill" :onClick="newBill" class="absolute -right-16 top-[20rem] hover:bg-neutral-100" />
-        <Button :icon="Edit" label="Edit" :onClick="EditList" class="absolute -right-16 top-[28rem] hover:bg-neutral-100" />
+        </hero>
     </div>
-
 </template>
 
 <style>
-#paper {
-    position: relative;
-    background: white;
-    height: 758px;
-    padding: 28px;
-    border-radius: 20px;
-    border-color: #E5E7EB;
-    border: 2px solid #E5E7EB;
+#data-section {
     display: flex;
+    padding: 28px;
     flex-direction: column;
-    gap: 12px;
+    align-items: flex-start;
+    gap: 20px;
+    flex: 1 0 0;
+    border-radius: 20px;
+    background-color: white;
 }
 
 header {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
+font-family: monospace;
     font-size: 32px;
     text-align: center;
 }
 
 p {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
+font-family: monospace;
     text-align: center;
 }
 
@@ -134,8 +113,7 @@ section {
 .search input {
     width: 100%;
     font-size: 14px;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    outline: none;
+    font-family: monospace;    outline: none;
 }
 
 select {
