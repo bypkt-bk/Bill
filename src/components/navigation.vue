@@ -1,28 +1,54 @@
 <script setup>
-import { House, Trash2, Store, Archive, LayoutDashboard } from "lucide-vue-next"
+import { House, Trash2, Store, Archive, LayoutDashboard, User, Settings } from "lucide-vue-next";
+
+function HomePage() {
+    window.location.href = '/home';
+}
+
+function StorePage() {
+    window.location.href = '/store';
+}
+
+function ItemPage() {
+    window.location.href = '/item';
+}
+
 </script>
 
 <template>
     <div id="navbar">
-        <div id="nav-button">
-            <House />
-            <p>Home</p>
+        <div id="navbar-container">
+            <div id="nav-button" @click="HomePage()">
+                <House />
+                <p>Home</p>
+            </div>
+            <div id="nav-button" @click="StorePage()">
+                <store />
+                <p>store</p>
+            </div>
+            <div id="nav-button" @click="ItemPage()">
+                <Archive />
+                <p>Items</p>
+            </div>
+            <div id="nav-button">
+                <LayoutDashboard />
+                <p>Report</p>
+            </div>
+            <div id="nav-button">
+                <Trash2 />
+                <p>Trash</p>
+            </div>
         </div>
-        <div id="nav-button">
-            <store />
-            <p>Home</p>
-        </div>
-        <div id="nav-button">
-            <Archive />
-            <p>Home</p>
-        </div>
-        <div id="nav-button">
-            <LayoutDashboard />
-            <p>Home</p>
-        </div>
-        <div id="nav-button">
-            <Trash2 />
-            <p>Home</p>
+
+        <div id="navbar-container">
+            <div id="nav-button">
+                <User />
+                <p>Profile</p>
+            </div>
+            <div id="nav-button">
+                <Settings />
+                <p>Setting</p>
+            </div>
         </div>
     </div>
 </template>
@@ -30,7 +56,13 @@ import { House, Trash2, Store, Archive, LayoutDashboard } from "lucide-vue-next"
 <style>
 #navbar {
     display: flex;
-    padding: 28px 18px;
+    flex-direction: column;
+    gap: 12px;
+}
+
+#navbar-container {
+    display: flex;
+    padding: 28px 14px;
     flex-direction: column;
     align-items: center;
     gap: 20px;
@@ -49,6 +81,6 @@ import { House, Trash2, Store, Archive, LayoutDashboard } from "lucide-vue-next"
 
 p {
     font-family: monospace;
-    font-size: 16px;
+    font-size: 14px;
 }
 </style>
