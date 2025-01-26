@@ -5,12 +5,12 @@ import { ref } from 'vue';
 import { Ellipsis } from 'lucide-vue-next';
 
 const bills = ref([
-    { bill_id: 1, product: 'John Doe', type: 'เสา', price: '2025-01-05' },
-    { bill_id: 2, product: 'Jane Smith', type: 'เสา', price: '2025-01-05', amount: '150' },
-    { bill_id: 3, product: 'Alice Johnson', type: 'เสา', price: '2025-01-05', amount: '300' },
+  { bill_id: 1, product: 'John Doe', type: 'เสา', price: '2025-01-05' },
+  { bill_id: 2, product: 'Jane Smith', type: 'เสา', price: '2025-01-05', amount: '150' },
+  { bill_id: 3, product: 'Alice Johnson', type: 'เสา', price: '2025-01-05', amount: '300' },
 ]);
 function BillPage(bill_id) {
-    window.location.href = `/bill/${bill_id}`;
+  window.location.href = `/bill/${bill_id}`;
 }
 </script>
 

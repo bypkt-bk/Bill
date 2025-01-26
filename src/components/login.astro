@@ -1,27 +1,58 @@
 ---
-import google from "../../public/google.svg";
-import logo from "../../public/logo.svg";
+import google from '../../public/google.svg';
+import logo from '../../public/logo.svg';
+import ball from '../../public/ball.png';
 ---
 
 <script>
   function handleLogin() {
     window.location.href = "/home";
   }
-  document.getElementById("login-button")?.addEventListener("click", handleLogin);
+  document
+    .getElementById("login-button")
+    ?.addEventListener("click", handleLogin);
 </script>
-<div id="login">
+<div id="login" class="z-10">
   <img src={logo.src} alt="google" />
   <p id="header">Welcome to bill</p>
   <div id="login-section">
-    <input />
-    <input />
+    <div class="relative w-full">   
+      <input/>
+      <small class="absolute top-[-10px] left-2 px-1 bg-white">
+        Username
+        </small>
+    </div>
+    <div class="relative w-full">
+      <input type="password"/>
+      <small class="absolute top-[-10px] left-2 px-1 bg-white">
+        Password
+        </small>
+    </div>
     <button id="login-button"> login </button>
+    <p>------- continue with -------</p>
     <button id="login-google-button">
       <img src={google.src} alt="google" width="24" />
     </button>
-    <p>or</p>
     <button id="newaccount-button"> Create new account </button>
   </div>
+  <img
+    src={ball.src}
+    alt="ball"
+    width="320"
+    class="absolute left-[74px] bottom-[100px] max-xl:hidden"
+  />
+  <img
+    src={ball.src}
+    alt="ball"
+    width="250"
+    class="absolute left-[360px] top-[65px] max-xl:hidden"
+  />
+  <img
+    src={ball.src}
+    alt="ball"
+    width="300"
+    class="absolute right-[164px] bottom-[50px] max-xl:hidden"
+  />
 </div>
 <style>
   #login {
@@ -55,7 +86,8 @@ import logo from "../../public/logo.svg";
   }
   input {
     display: flex;
-    padding: 8px 56px 8px 12px;
+    padding: 8px 12px 8px 12px;
+    width: 100%;
     align-items: center;
     align-self: stretch;
     border-radius: 6px;

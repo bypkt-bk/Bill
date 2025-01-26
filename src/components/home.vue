@@ -4,12 +4,33 @@ import navigation from './navigation.vue';
 import { ref } from 'vue';
 
 const bills = ref([
-    { bill_id: 1, name: 'John Doe', order: '2025-01-05', shipping: '2025-01-05', amount: '200', status: 'paid' },
-    { bill_id: 2, name: 'Jane Smith', order: '2025-01-04', shipping: '2025-01-05', amount: '150', status: 'waiting' },
-    { bill_id: 3, name: 'Alice Johnson', order: '2025-01-03', shipping: '2025-01-05', amount: '300', status: 'waiting' },
+  {
+    bill_id: 1,
+    name: 'John Doe',
+    order: '2025-01-05',
+    shipping: '2025-01-05',
+    amount: '200',
+    status: 'paid',
+  },
+  {
+    bill_id: 2,
+    name: 'Jane Smith',
+    order: '2025-01-04',
+    shipping: '2025-01-05',
+    amount: '150',
+    status: 'waiting',
+  },
+  {
+    bill_id: 3,
+    name: 'Alice Johnson',
+    order: '2025-01-03',
+    shipping: '2025-01-05',
+    amount: '300',
+    status: 'waiting',
+  },
 ]);
 function BillPage(bill_id) {
-    window.location.href = `/bill/${bill_id}`;
+  window.location.href = `/bill/${bill_id}`;
 }
 </script>
 

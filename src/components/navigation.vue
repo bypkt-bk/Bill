@@ -1,18 +1,17 @@
 <script setup>
-import { House, Trash2, Store, Archive, LayoutDashboard, User, Settings } from "lucide-vue-next";
+import { House, Trash2, Store, Archive, LayoutDashboard, User, Settings } from 'lucide-vue-next';
 
 function HomePage() {
-    window.location.href = '/home';
+  window.location.href = '/home';
 }
 
 function StorePage() {
-    window.location.href = '/store';
+  window.location.href = '/store';
 }
 
 function ItemPage() {
-    window.location.href = '/item';
+  window.location.href = '/item';
 }
-
 </script>
 
 <template>

@@ -9,36 +9,34 @@ import { ref, onMounted, watch } from 'vue';
 import navigation from './navigation.vue';
 
 const df = new DateFormatter('en-US', {
-    dateStyle: 'long',
+  dateStyle: 'long',
 });
-const items = ref([
-    { bill_id: 1, product: '', price: '', },
-]);
+const items = ref([{ bill_id: 1, product: '', price: '' }]);
 
 function updateAmount(item: { quantity: number; unitPrice: number }): number {
-    return item.quantity * item.unitPrice;
+  return item.quantity * item.unitPrice;
 }
 
 function HomePage() {
-    window.location.href = '/home';
+  window.location.href = '/home';
 }
 
 function AccountPage() {
-    window.location.href = '/account';
+  window.location.href = '/account';
 }
 
 function PrintBill() {
-    window.print();
-    console.log('print');
+  window.print();
+  console.log('print');
 }
 
 function addItem() {
-    items.value.push({
-        quantity: null,
-        description: null,
-        unitPrice: null,
-        amount: null,
-    });
+  items.value.push({
+    quantity: null,
+    description: null,
+    unitPrice: null,
+    amount: null,
+  });
 }
 </script>
 
