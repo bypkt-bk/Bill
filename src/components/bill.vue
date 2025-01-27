@@ -8,35 +8,56 @@ import { Calendar as CalendarIcon } from 'lucide-vue-next';
 import { ref, onMounted, watch } from 'vue';
 import navigation from './navigation.vue';
 
+interface Item {
+  item_id: number;
+  product: string;
+  unitPrice: number;
+}
+
+interface SelectedItem extends Item {
+  quantity: number | null;
+}
+
 const df = new DateFormatter('en-US', {
   dateStyle: 'long',
 });
-const items = ref([{ bill_id: 1, product: '', price: '' }]);
+const value = ref<DateValue>();
 
-function updateAmount(item: { quantity: number; unitPrice: number }): number {
-  return item.quantity * item.unitPrice;
-}
+const items = ref<Item[]>([
+  { item_id: 1, product: 'Apple', unitPrice: 12 },
+  { item_id: 2, product: 'Banana', unitPrice: 8 },
+  { item_id: 3, product: 'Cherry', unitPrice: 15 },
+  { item_id: 4, product: 'Date', unitPrice: 20 },
+  { item_id: 5, product: 'Eggplant', unitPrice: 25 },
+]);
+
+const item_select = ref<SelectedItem[]>([]);
+
+const isItemSelected = (item: Item): boolean => {
+  return item_select.value.some((selected) => selected.item_id === item.item_id);
+};
+
+const toggleItem = (item: Item, event: Event): void => {
+  const checkbox = event.target as HTMLInputElement;
+
+  if (checkbox.checked) {
+    item_select.value.push({
+      ...item,
+      quantity: null,
+    });
+  } else {
+    item_select.value = item_select.value.filter((selected) => selected.item_id !== item.item_id);
+  }
+};
+
+const total = (item_select: SelectedItem[]): number => {
+  return item_select.reduce((sum, item) => {
+    return sum + (item.quantity || 0) * item.unitPrice;
+  }, 0);
+};
 
 function HomePage() {
   window.location.href = '/home';
-}
-
-function AccountPage() {
-  window.location.href = '/account';
-}
-
-function PrintBill() {
-  window.print();
-  console.log('print');
-}
-
-function addItem() {
-  items.value.push({
-    quantity: null,
-    description: null,
-    unitPrice: null,
-    amount: null,
-  });
 }
 </script>
 
@@ -50,14 +71,14 @@ function addItem() {
             <p>171 หมู่14 ถนน อุบล-ตระการ ตำบลไร่น้อย อำเภอเมืองอุบลราชธานี จังหวัดอุบลราชธานี</p>
             <section>
                 <div class="relative flex flex-1 min-w-[300px]">
-                    <input type="text" class="customername-input" v-model="customer_name">
+                    <input type="text" class="customername-input">
                     <small class="absolute top-[-10px] left-2 px-1 bg-white">
                         Customer Name</small></input>
                 </div>
                 <Popover>
                     <PopoverTrigger as-child>
                         <button variant="outline" :class="cn(
-                            'flex flex-row max-w-[300px] w-full h-[40px] items-center justify-start border-[1px] border-solid border-[#E5E7EB] rounded-[6px] px-4 text-left text-[14px]',
+                            'flex flex-row min-w-[180px] w-full h-[40px] items-center justify-start border-[1px] border-solid border-[#E5E7EB] rounded-[6px] px-4 text-left text-[14px]',
                             !value && 'text-muted-foreground',
                         )">
                             <CalendarIcon class="mr-2 h-4 w-4" />
@@ -70,7 +91,7 @@ function addItem() {
                 </Popover>
             </section>
             <div class="relative w-full">
-                <input type="text" class="address-input" v-model="address" />
+                <input type="text" class="address-input" />
                 <small class="absolute top-[-10px] left-2 px-1 bg-white">Address</small>
             </div>
             <div class="table-container">
@@ -84,31 +105,37 @@ function addItem() {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(item, description) in select" :key="description">
-                            <td><input type="number"
+                        <tr v-for="(item, product) in item_select" :key="product">
+                            <td>
+                                <input type="number"
                                     class="input-item w-full max-w-12 px-1 appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                                    v-model="item.quantity"></td>
-                            <td><input class="input-item w-full px-1" v-model="item.description"></td>
-                            <td><input type="number"
-                                    class="input-item w-full max-w-[74px] px-1 appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                                    v-model="item.unitPrice"></td>
-                            <td><input class="input-item w-full max-w-[76px] px-1" :value="updateAmount(item)" readonly>
+                                    v-model="item.quantity">
+                            </td>
+                            <td>
+                                {{ item.product }}</td>
+                            <td>
+                                {{ item.unitPrice }}
+                            </td>
+                            <td>
+                                {{ (item.quantity || 0) * item.unitPrice }}
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <div class="flex self-end gap-2">
-                <button
-                    class="w-[90px] h-fit p-2 px-4 text-[14px] text-neutral-700 rounded-[6px] border border-neutral-700"
-                    @click="HomePage">
-                    Cancel
-                </button>
-                <button
-                    class="w-[90px] h-fit p-2 px-4 text-[14px] bg-neutral-700 text-white rounded-[6px] border border-neutral-700"
-                    @click="SaveDate">
-                    Save
-                </button>
+            <div class="flex justify-between items-center w-full">
+                <p class="text-xl">total: {{ total(item_select) }}</p>
+                <div class="flex self-end gap-2">
+                    <button
+                        class="w-[90px] h-fit p-2 px-4 text-[14px] text-neutral-700 rounded-[6px] border border-neutral-700"
+                        @click="HomePage">
+                        Cancel
+                    </button>
+                    <button
+                        class="w-[90px] h-fit p-2 px-4 text-[14px] bg-neutral-700 text-white rounded-[6px] border border-neutral-700">
+                        Save
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -118,28 +145,30 @@ function addItem() {
             </header>
             <section>
                 <div class="relative flex flex-1 min-w-[300px]">
-                    <input type="text" class="customername-input" v-model="customer_name">
+                    <input type="text" class="customername-input">
                     <small class="absolute top-[-10px] left-2 px-1 bg-white">
                         Product</small></input>
                 </div>
             </section>
             <div class="table-container">
+
                 <table>
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>product</th>
-                            <th>price</th>
+                            <th>Product</th>
+                            <th>Price</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(item, description) in items" :key="description">
-                            <td><input type="checkbox" id="vehicle1" name="vehicle1" value="Bike"></td>
+                        <tr v-for="(item, index) in items" :key="item.item_id" class="hover:bg-slate-50">
                             <td>
-                                <p>abc</p>
+                                <input type="checkbox" :id="'item' + item.item_id" :checked="isItemSelected(item)"
+                                    @change="toggleItem(item, $event)" />
                             </td>
+                            <td>{{ item.product }}</td>
                             <td>
-                                <p>123</p>
+                                <p>{{ item.unitPrice }}</p>
                             </td>
                         </tr>
                     </tbody>
