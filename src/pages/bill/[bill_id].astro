@@ -1,13 +1,10 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import Bills from '../../components/bill.vue';
-export function getStaticPaths() {
-  return [{ params: { bill_id: '1' } }, { params: { bill_id: '2' } }, { params: { bill_id: '3' } }];
-}
 
 const { bill_id } = Astro.params;
 ---
 
 <Layout>
-    <Bills client:load/>
+    <Bills bill_id={bill_id}  client:load/>
 </Layout>

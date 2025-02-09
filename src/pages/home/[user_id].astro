@@ -1,0 +1,10 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Datalist from '@/components/home.vue';
+
+const { user_id } = Astro.params;
+---
+
+<Layout>
+	<Datalist user_id={user_id} client:load />
+</Layout>

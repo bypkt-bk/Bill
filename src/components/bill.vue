@@ -57,7 +57,7 @@ const total = (item_select: SelectedItem[]): number => {
 };
 
 function HomePage() {
-  window.location.href = '/home';
+  window.location.href = '/home/1';
 }
 </script>
 
